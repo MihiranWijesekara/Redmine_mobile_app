@@ -201,11 +201,9 @@ class ApiService {
   }
 
   //Add Spent time
-  Future<TimeEntry> addSpentTime(TimeEntry timeEntry) async {
+  Future<TimeEntry?> addSpentTime(TimeEntry timeEntry) async {
     const String url =
         "http://192.168.0.9/projects/gsmb-project/time_entries.json";
-
-    // Replace 'username' and 'password' with your actual credentials
     String username = 'user';
     String password = 'mLM:jDE:5h/T';
     String basicAuth =
@@ -220,20 +218,9 @@ class ApiService {
         },
         body: json.encode(timeEntry.toJson()),
       );
-
-      print("Response Status code: ${response.statusCode}");
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        print("Response: ${response.body}");
-        TimeEntry newtimeEntry = TimeEntry.fromJson(json.decode(response.body));
-        return newtimeEntry;
-      } else {
-        print("Failed to add Spent Time. Status Code: ${response.statusCode}");
-        print("Response body: ${response.body}");
-        throw Exception("Failed to Spent Time");
-      }
     } catch (error) {
       print("Error: $error");
-      throw Exception("Failed to Spent Time");
+      throw Exception("Failed to add Spent Time");
     }
   }
 }

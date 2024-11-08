@@ -26,7 +26,6 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
 
   Future<void> fetchIssues() async {
     try {
-      // Fetch issues from ApiService and update state
       List<IssuesModel> fetchedIssues = await apiService.fetchIssues();
       setState(() {
         issues = fetchedIssues;
@@ -65,6 +64,12 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
         selectedDate = pickedDate;
       });
     }
+  }
+
+  String getFormattedDate() {
+    return selectedDate != null
+        ? "${selectedDate!.year.toString().padLeft(4, '0')}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}"
+        : '';
   }
 
   @override
@@ -156,7 +161,7 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
                         color: Color(0xFF706E6E),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     SizedBox(
                       width: 230,
                       child: DropdownButtonFormField<String>(
@@ -245,7 +250,6 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
                     ),
                     AddIssusInput(
                       text: "Enter Spent Hours",
-                      // controller: spentHoursController,
                       onChanged: (value) {
                         hours = double.parse(value);
                       },
@@ -328,33 +332,12 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      // Printing all input data in the debug console
-                      print('Selected Issue ID: $selectedIssueId');
-                      print('Spent Hours: $hours');
-                      print('Comment: $comments');
-                      print('User ID: $selectedUserId');
-                      print('User Name: $selectedUserType');
-                      print('Activity Type: $selectedActivityType');
-                      print('Activity ID: $selectedActivityIds');
-                      if (selectedDate != null) {
-                        print(
-                          'Date: ${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
-                        );
-                      } else {
-                        print('Date: Not selected');
-                      }
-                    } else {
-                      print('Please fill in all required fields.');
-                    }
-
                     final newtimeEntry = TimeEntry(
                       issue: Issue(id: selectedIssueId ?? 0),
                       user: User(
                           id: selectedUserId ?? 0,
                           name: selectedUserType ?? ''),
-                      spentOn:
-                          "${selectedDate?.year}-${selectedDate?.month}-${selectedDate?.day}",
+                      spentOn: getFormattedDate(),
                       hours: hours,
                       comments: comments,
                       activity: Activity(
@@ -362,6 +345,8 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
                           name: selectedActivityType ?? ''),
                     );
                     await apiService.addSpentTime(newtimeEntry);
+
+                    _formKey.currentState?.reset();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF94cc80),

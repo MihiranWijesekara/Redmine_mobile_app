@@ -34,12 +34,10 @@ class TimeEntry {
 
   Map<String, dynamic> toJson() {
     return {
-      'time_entries': {
-        'id': id,
-        // 'project': project.toJson(),
-        'issue': issue.toJson(),
-        'user': user.toJson(),
-        'activity': activity.toJson(),
+      'time_entry': {
+        'issue_id': issue.id,
+        'user_id': user.id,
+        'activity_id': activity.id,
         'hours': hours,
         'comments': comments,
         'spent_on': spentOn,
