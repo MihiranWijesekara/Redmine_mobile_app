@@ -51,10 +51,19 @@ class _AddIssuesState extends State<AddIssues> {
     }
   }
 
-  String formatDate(DateTime? date) {
-    if (date == null) return '';
-    return DateFormat('dd/MM/yyyy').format(date);
+   String getFormattedStartDate() {
+    return selectedStartDate != null
+        ? "${selectedStartDate!.year.toString().padLeft(4, '0')}-${selectedStartDate!.month.toString().padLeft(2, '0')}-${selectedStartDate!.day.toString().padLeft(2, '0')}"
+        : '';
   }
+
+    String getFormattedDueDate() {
+    return selectedDueDate != null
+        ? "${selectedDueDate!.year.toString().padLeft(4, '0')}-${selectedDueDate!.month.toString().padLeft(2, '0')}-${selectedDueDate!.day.toString().padLeft(2, '0')}"
+        : '';
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -392,19 +401,15 @@ class _AddIssuesState extends State<AddIssues> {
                         estimatedHours: estimatedHours,
                         status: Status(
                           id: selectedstatusIds ?? 0,
-                          name: selectedStatus ?? '',
-                          isClosed: false,
                         ),
                         tracker: Tracker(
                           id: selectedIssueId ?? 0,
-                          name: selectedIssueType ?? '',
                         ),
-                        startDate: selectedStartDate,
-                        dueDate: selectedDueDate,
-                        author: Author(id: 0, name: ''),
+                        startDate: getFormattedStartDate(),
+                        dueDate: getFormattedDueDate(),
+                        author: Author(id: 0),
                         priority: Priority(
                           id: selectedpriorityTypeIds ?? 0,
-                          name: selectedPriority ?? '',
                         ),
                         doneRatio: selecteddoneRationValue ?? 0,
                         createdOn:
@@ -412,22 +417,6 @@ class _AddIssuesState extends State<AddIssues> {
                       );
 
                       await apiService.addIssues(newIssue);
-
-                      _formKey.currentState!.reset();
-                      setState(() {
-                        subject = '';
-                        description = '';
-                        estimatedHours = 0;
-                        selectedIssueType = null;
-                        selectedStatus = null;
-                        selectedPriority = null;
-                        selectedStartDate = null;
-                        selectedDueDate = null;
-                        selectedIssueId = null;
-                        selectedstatusIds = null;
-                        selectedpriorityTypeIds = null;
-                        selecteddoneRationValue = null;
-                      });
                     }
                   },
                   style: ElevatedButton.styleFrom(

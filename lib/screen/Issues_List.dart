@@ -48,7 +48,7 @@ class _IssuesListState extends State<IssuesList> {
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     IssuesModel issues = snapshot.data![index];
-                    String priority = issues.priority.name;
+                    String priority = issues.priority.name!;
                     return Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class _IssuesListState extends State<IssuesList> {
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          Text(issues.author.name,
+                                          Text(issues.author.name!,
                                               style: const TextStyle(
                                                 color: Color(0xFF707070),
                                                 fontSize: 20,
@@ -156,8 +156,7 @@ class _IssuesListState extends State<IssuesList> {
                                             ),
                                           ),
                                           Text(
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(issues.startDate!),
+                                            issues.startDate!,
                                             style: const TextStyle(
                                               color: Color(0xFF707070),
                                               fontSize: 18,
@@ -173,8 +172,7 @@ class _IssuesListState extends State<IssuesList> {
                                                 fontSize: 19,
                                               )),
                                           Text(
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(issues.dueDate!),
+                                            issues.dueDate!,
                                             style: const TextStyle(
                                               color: Color(0xFFE51B1B),
                                               fontSize: 18,

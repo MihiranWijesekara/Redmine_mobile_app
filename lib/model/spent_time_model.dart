@@ -69,12 +69,13 @@ class Project {
 
 class Issue {
   final int id;
-
-  Issue({required this.id});
+  final String? name;
+  Issue({this.name, required this.id});
 
   factory Issue.fromJson(Map<String, dynamic> json) {
     return Issue(
       id: json['id'],
+      name: json['name'],
     );
   }
 

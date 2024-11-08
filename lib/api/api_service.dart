@@ -70,7 +70,6 @@ class ApiService {
   Future<IssuesModel> addIssues(IssuesModel addissuesModel) async {
     const String url = "http://192.168.0.9/projects/gsmb-project/issues.json";
 
-    // Replace 'username' and 'password' with your actual credentials
     String username = 'user';
     String password = 'mLM:jDE:5h/T';
     String basicAuth =
@@ -81,7 +80,7 @@ class ApiService {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": basicAuth, // Add the authorization header
+          "Authorization": basicAuth, 
         },
         body: json.encode(addissuesModel.toJson()),
       );

@@ -8,8 +8,8 @@ class IssuesModel {
   final Author author;
   final String subject;
   final String description;
-  final DateTime? startDate;
-  final DateTime? dueDate;
+  final String? startDate;
+  final String? dueDate;
   final int doneRatio;
   final double estimatedHours;
   final String createdOn;
@@ -27,8 +27,8 @@ class IssuesModel {
     required this.author,
     required this.subject,
     required this.description,
-    this.startDate,
-    this.dueDate,
+     this.startDate,
+     this.dueDate,
     required this.doneRatio,
     required this.estimatedHours,
     required this.createdOn,
@@ -55,12 +55,8 @@ class IssuesModel {
           : Author(id: 0, name: "Unknown"),
       subject: json['subject'] ?? "",
       description: json['description'] ?? "",
-      startDate: json['start_date'] != null
-          ? DateFormat('yyyy-MM-dd').parse(json['start_date'])
-          : null,
-      dueDate: json['due_date'] != null
-          ? DateFormat('yyyy-MM-dd').parse(json['due_date'])
-          : null,
+      startDate: json['start_date'] ,
+      dueDate: json['due_date'] ,
       doneRatio: json['done_ratio'] ?? 0,
       estimatedHours: (json['estimated_hours'] ?? 0).toDouble(),
       createdOn: json['created_on'] ?? "",
@@ -73,16 +69,13 @@ class IssuesModel {
   Map<String, dynamic> toJson() {
     return {
       'issue': {
-        'tracker_id': trackerId,
-        'status_id': statusId,
-        'priority_id': priorityId,
-        'subject': subject.trim(),
+        'tracker_id': tracker.id,
+        'status_id': status.id,
+        'priority_id': priority.id,
+        'subject': subject,
         'description': description,
-        'start_date': startDate != null
-            ? DateFormat('yyyy-MM-dd').format(startDate!)
-            : null,
-        'due_date':
-            dueDate != null ? DateFormat('yyyy-MM-dd').format(dueDate!) : null,
+        'start_date': startDate,
+        'due_date':dueDate,
         'done_ratio': doneRatio,
         'is_private': false,
         'estimated_hours': estimatedHours,
@@ -115,9 +108,9 @@ class Project {
 
 class Tracker {
   final int id;
-  final String name;
+  final String? name;
 
-  Tracker({required this.id, required this.name});
+  Tracker({required this.id,  this.name});
 
   factory Tracker.fromJson(Map<String, dynamic> json) {
     return Tracker(
@@ -136,10 +129,10 @@ class Tracker {
 
 class Status {
   final int id;
-  final String name;
-  final bool isClosed;
+  final String? name;
+  final bool? isClosed;
 
-  Status({required this.id, required this.name, required this.isClosed});
+  Status({required this.id,  this.name,  this.isClosed});
 
   factory Status.fromJson(Map<String, dynamic> json) {
     return Status(
@@ -160,9 +153,9 @@ class Status {
 
 class Priority {
   final int id;
-  final String name;
+  final String? name;
 
-  Priority({required this.id, required this.name});
+  Priority({required this.id,  this.name});
 
   factory Priority.fromJson(Map<String, dynamic> json) {
     return Priority(
@@ -181,9 +174,9 @@ class Priority {
 
 class Author {
   final int id;
-  final String name;
+  final String? name;
 
-  Author({required this.id, required this.name});
+  Author({required this.id,  this.name});
 
   factory Author.fromJson(Map<String, dynamic> json) {
     return Author(
