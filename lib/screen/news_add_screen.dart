@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:redmine_mobile_app/api/api_service.dart';
+import 'package:redmine_mobile_app/model/news_model.dart';
 import 'package:redmine_mobile_app/widget/add_issus_input.dart';
 
 class NewsAddScreen extends StatefulWidget {
@@ -9,6 +11,23 @@ class NewsAddScreen extends StatefulWidget {
 }
 
 class _NewsAddScreenState extends State<NewsAddScreen> {
+  final ApiService apiService = ApiService();
+  final _formKey = GlobalKey<FormState>();
+
+  String title = '';
+  String summary = '';
+  String description = '';
+
+  int? selectedProjectId;
+  int? selectedAuthorId;
+
+  static const Map<String, int> ProjectId = {
+    "GSMB-Project": 1,
+  };
+  static const Map<String, int> AuthorId = {
+    "Achintha Wijesekara": 1,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +50,7 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 Row(
@@ -73,8 +93,8 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
 
                         onChanged: (String? newValue) {
                           setState(() {
-                            //  selectedUserType = newValue;
-                            //  selectedUserId = UserId[newValue];
+                            // selectedUserType = newValue;
+                            selectedProjectId = ProjectId[newValue];
                           });
                         },
                       ),
@@ -125,7 +145,7 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
                         onChanged: (String? newValue) {
                           setState(() {
                             //  selectedUserType = newValue;
-                            //  selectedUserId = UserId[newValue];
+                            selectedAuthorId = AuthorId[newValue];
                           });
                         },
                       ),
@@ -166,7 +186,7 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
                             ),
                           ),
                           onChanged: (value) {
-                            //  description = value;
+                            title = value;
                           },
                         ),
                       ),
@@ -207,14 +227,14 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
                             ),
                           ),
                           onChanged: (value) {
-                            //  description = value;
+                            summary = value;
                           },
                         ),
                       ),
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Row(
@@ -248,7 +268,7 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
                             ),
                           ),
                           onChanged: (value) {
-                            //  description = value;
+                            description = value;
                           },
                         ),
                       ),
@@ -259,7 +279,21 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
                   height: 50,
                 ),
                 ElevatedButton(
-                  onPressed: () async {},
+                  onPressed: () async {
+                    final newsModel = NewsModel(
+                      project: Project(
+                        id: selectedProjectId ?? 0,
+                      ),
+                      author: Author(
+                        id: selectedAuthorId ?? 0,
+                      ),
+                      title: title,
+                      summary: summary,
+                      description: description,
+                      createdOn: DateTime.now(),
+                    );
+                    await apiService.addNews(newsModel);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 145, 155, 141),
                     padding: const EdgeInsets.symmetric(

@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: MainScreen(),
-      home: NewsAddScreen(),
+      home: MainScreen(),
+      //  home: NewsAddScreen(),
     );
   }
 }

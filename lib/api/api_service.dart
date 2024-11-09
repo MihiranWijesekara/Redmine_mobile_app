@@ -80,7 +80,7 @@ class ApiService {
         Uri.parse(url),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": basicAuth, 
+          "Authorization": basicAuth,
         },
         body: json.encode(addissuesModel.toJson()),
       );
@@ -222,4 +222,41 @@ class ApiService {
       throw Exception("Failed to add Spent Time");
     }
   }
+
+  //Add News
+ Future<NewsModel?> addNews(NewsModel newsModel) async {
+  const String url = "http://192.168.0.9/projects/gsmb-project/news.json";
+  String username = 'user';
+  String password = 'mLM:jDE:5h/T';
+  String basicAuth =
+      'Basic ' + base64Encode(utf8.encode('$username:$password'));
+
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": basicAuth,
+      },
+      body: json.encode(newsModel.toJson()),
+    );
+
+    print("Response Status code: ${response.statusCode}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print("Response: ${response.body}");
+      return NewsModel.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 204) {
+      print("News successfully added, no content returned.");
+      return null; 
+    } else {
+      print("Failed to add News. Status Code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+      throw Exception("Failed to add News");
+    }
+  } catch (error) {
+    print("Error: $error");
+    throw Exception("Failed to add News");
+  }
+}
+
 }
