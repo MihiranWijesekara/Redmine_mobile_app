@@ -280,19 +280,83 @@ class _NewsAddScreenState extends State<NewsAddScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    final newsModel = NewsModel(
-                      project: Project(
-                        id: selectedProjectId ?? 0,
-                      ),
-                      author: Author(
-                        id: selectedAuthorId ?? 0,
-                      ),
-                      title: title,
-                      summary: summary,
-                      description: description,
-                      createdOn: DateTime.now(),
-                    );
-                    await apiService.addNews(newsModel);
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        final newsModel = NewsModel(
+                          project: Project(
+                            id: selectedProjectId ?? 0,
+                          ),
+                          author: Author(
+                            id: selectedAuthorId ?? 0,
+                          ),
+                          title: title,
+                          summary: summary,
+                          description: description,
+                          createdOn: DateTime.now(),
+                        );
+
+                        final result = await apiService.addNews(newsModel);
+
+                        if (result != null) {
+                          // Show success dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text("News added successfully!"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context)
+                                          .pop(); // Close both the dialog and the add screen
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Information"),
+                                content: const Text("News added successfully"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      } catch (error) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Error"),
+                              content: Text("Failed to add news: $error"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 145, 155, 141),
