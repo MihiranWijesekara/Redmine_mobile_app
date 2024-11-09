@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/news_model.dart';
+import 'package:redmine_mobile_app/screen/news_add_screen.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -120,6 +121,17 @@ class _NewsScreenState extends State<NewsScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewsAddScreen()),
+          );
+        },
+        backgroundColor: const Color(0xFF68B0AB),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
