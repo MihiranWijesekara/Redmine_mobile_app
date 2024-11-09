@@ -51,19 +51,17 @@ class _AddIssuesState extends State<AddIssues> {
     }
   }
 
-   String getFormattedStartDate() {
+  String getFormattedStartDate() {
     return selectedStartDate != null
         ? "${selectedStartDate!.year.toString().padLeft(4, '0')}-${selectedStartDate!.month.toString().padLeft(2, '0')}-${selectedStartDate!.day.toString().padLeft(2, '0')}"
         : '';
   }
 
-    String getFormattedDueDate() {
+  String getFormattedDueDate() {
     return selectedDueDate != null
         ? "${selectedDueDate!.year.toString().padLeft(4, '0')}-${selectedDueDate!.month.toString().padLeft(2, '0')}-${selectedDueDate!.day.toString().padLeft(2, '0')}"
         : '';
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -383,17 +381,6 @@ class _AddIssuesState extends State<AddIssues> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-
-                      print("Subject: $subject");
-                      print("Description: $description");
-                      print("Estimated Hours: $estimatedHours");
-                      print("Selected Issue Type: $selectedIssueType");
-                      print("Selected Issue ID: $selectedIssueId");
-                      print("Selected Status ID: $selectedstatusIds");
-                      print("Selected Priority ID: $selectedpriorityTypeIds");
-                      print("Selected Done Ratio: $selecteddoneRationValue");
-                      print("Selected Start Date: $selectedStartDate");
-                      print("Selected Due Date: $selectedDueDate");
 
                       final newIssue = IssuesModel(
                         subject: subject,
