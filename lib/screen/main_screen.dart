@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/project_overview.dart';
 import 'package:redmine_mobile_app/screen/Issues_List.dart';
+import 'package:redmine_mobile_app/screen/calendar_screen.dart';
 import 'package:redmine_mobile_app/screen/news_screen.dart';
 import 'package:redmine_mobile_app/screen/spent_time_screen.dart';
 import 'package:redmine_mobile_app/widget/footer.dart';
@@ -172,47 +173,56 @@ class _MainScreenState extends State<MainScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 170,
-                          height: 90,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color.fromARGB(255, 196, 131, 179),
-                                Color.fromARGB(255, 177, 40, 95)
-                              ],
-                              begin: Alignment.bottomRight,
-                              end: Alignment.topLeft,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CalendarScreen()),
+                            );
+                          },
+                          child: Container(
+                            width: 170,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color.fromARGB(255, 196, 131, 179),
+                                  Color.fromARGB(255, 177, 40, 95)
+                                ],
+                                begin: Alignment.bottomRight,
+                                end: Alignment.topLeft,
+                              ),
                             ),
-                          ),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                bottom: -20,
-                                right: -10,
-                                child: Container(
-                                  width: 55,
-                                  height: 55,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    shape: BoxShape.circle,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  bottom: -20,
+                                  right: -10,
+                                  child: Container(
+                                    width: 55,
+                                    height: 55,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                child: Text(
-                                  "Calendar",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Text(
+                                    "Calendar",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         GestureDetector(

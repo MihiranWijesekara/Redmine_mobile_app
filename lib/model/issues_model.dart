@@ -27,8 +27,8 @@ class IssuesModel {
     required this.author,
     required this.subject,
     required this.description,
-     this.startDate,
-     this.dueDate,
+    this.startDate,
+    this.dueDate,
     required this.doneRatio,
     required this.estimatedHours,
     required this.createdOn,
@@ -55,8 +55,8 @@ class IssuesModel {
           : Author(id: 0, name: "Unknown"),
       subject: json['subject'] ?? "",
       description: json['description'] ?? "",
-      startDate: json['start_date'] ,
-      dueDate: json['due_date'] ,
+      startDate: json['start_date'],
+      dueDate: json['due_date'],
       doneRatio: json['done_ratio'] ?? 0,
       estimatedHours: (json['estimated_hours'] ?? 0).toDouble(),
       createdOn: json['created_on'] ?? "",
@@ -75,15 +75,35 @@ class IssuesModel {
         'subject': subject,
         'description': description,
         'start_date': startDate,
-        'due_date':dueDate,
+        'due_date': dueDate,
         'done_ratio': doneRatio,
         'is_private': false,
         'estimated_hours': estimatedHours,
-     
       }
     };
   }
+
+  // Add this empty constructor
+  IssuesModel.empty()
+      : subject = '',
+        startDate = '',
+        dueDate = '',
+        tracker = Tracker(id: 0, name: "Unknown"),
+        status = Status(id: 0, name: "Unknown", isClosed: false),
+        priority = Priority(id: 0, name: "Unknown"),
+        author = Author(id: 0, name: "Unknown"),
+        description = '',
+        doneRatio = 0,
+        estimatedHours = 0.0,
+        id = 0,
+        createdOn = '',
+        closedOn = null,
+        statusId = null,
+        trackerId = null,
+        priorityId = null;
 }
+
+// Your existing fromJson() and other methods...
 
 class Project {
   final int id;
@@ -110,7 +130,7 @@ class Tracker {
   final int id;
   final String? name;
 
-  Tracker({required this.id,  this.name});
+  Tracker({required this.id, this.name});
 
   factory Tracker.fromJson(Map<String, dynamic> json) {
     return Tracker(
@@ -132,7 +152,7 @@ class Status {
   final String? name;
   final bool? isClosed;
 
-  Status({required this.id,  this.name,  this.isClosed});
+  Status({required this.id, this.name, this.isClosed});
 
   factory Status.fromJson(Map<String, dynamic> json) {
     return Status(
@@ -155,7 +175,7 @@ class Priority {
   final int id;
   final String? name;
 
-  Priority({required this.id,  this.name});
+  Priority({required this.id, this.name});
 
   factory Priority.fromJson(Map<String, dynamic> json) {
     return Priority(
@@ -176,7 +196,7 @@ class Author {
   final int id;
   final String? name;
 
-  Author({required this.id,  this.name});
+  Author({required this.id, this.name});
 
   factory Author.fromJson(Map<String, dynamic> json) {
     return Author(
@@ -193,39 +213,38 @@ class Author {
   }
 }
 
+// Mapping of issue types to IDs
+const Map<String, int> issueTypeIds = {
+  "Bug": 1,
+  "Feature": 2,
+  "Support": 3,
+  "Documentation": 4,
+};
 
-  // Mapping of issue types to IDs
-   const Map<String, int> issueTypeIds = {
-    "Bug": 1,
-    "Feature": 2,
-    "Support": 3,
-    "Documentation": 4,
-  };
+const Map<String, int> statusIds = {
+  "New": 1,
+  "In Progress": 2,
+  "Completed": 3,
+};
 
-   const Map<String, int> statusIds = {
-    "New": 1,
-    "In Progress": 2,
-    "Completed": 3,
-  };
+const Map<String, int> priorityTypeIds = {
+  "Low": 1,
+  "Normal": 2,
+  "High": 3,
+  "Urgent": 4,
+  "Immediate": 5,
+};
 
-   const Map<String, int> priorityTypeIds = {
-    "Low": 1,
-    "Normal": 2,
-    "High": 3,
-    "Urgent": 4,
-    "Immediate": 5,
-  };
-
-  const Map<String, int> doneRationValue = {
-    "0%": 0,
-    "10% ": 10,
-    "20%": 20,
-    "30%": 30,
-    "40%": 40,
-    "50%": 50,
-    "60%": 60,
-    "70%": 70,
-    "80%": 80,
-    "90%": 90,
-    "100%": 100,
-  };
+const Map<String, int> doneRationValue = {
+  "0%": 0,
+  "10% ": 10,
+  "20%": 20,
+  "30%": 30,
+  "40%": 40,
+  "50%": 50,
+  "60%": 60,
+  "70%": 70,
+  "80%": 80,
+  "90%": 90,
+  "100%": 100,
+};
