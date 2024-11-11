@@ -21,7 +21,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           padding: EdgeInsets.symmetric(horizontal: 60),
           child: Center(
             child: Text(
-              "Calender",
+              "Calendar",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -36,39 +36,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 }
 
-/*
-class CalendarApp extends StatelessWidget {
-  const CalendarApp({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 60),
-            child: Center(
-              child: Text(
-                "Calender",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 3, 1, 58),
-                ),
-              ),
-            ),
-          ),
-        ),
-        body: const CalendarYear(),
-      ),
-    );
-  }
-}
-*/
 class CalendarYear extends StatefulWidget {
   const CalendarYear({super.key});
 
