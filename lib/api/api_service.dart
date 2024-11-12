@@ -317,4 +317,33 @@ class ApiService {
       throw Exception("Error deleting Spent time: $error");
     }
   }
+
+  // Delete News
+  Future<void> deleteNews(int NewsId) async {
+    final url = Uri.parse('http://192.168.0.9/news/$NewsId.json');
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    final String basicAuth =
+        'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': basicAuth,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print("News deleted successfully.");
+      } else {
+        print("Failed to delete News. Status code: ${response.statusCode}");
+        throw Exception(
+            "Failed to delete News. Status code: ${response.statusCode}");
+      }
+    } catch (error) {
+      print("Error deleting News: $error");
+      throw Exception("Error deleting News: $error");
+    }
+  }
 }

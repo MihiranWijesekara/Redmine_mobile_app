@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 class NewsModel {
+  final int? id;
   final Project project;
   final Author author;
   final String title;
@@ -9,6 +10,7 @@ class NewsModel {
   final DateTime? createdOn;
 
   NewsModel({
+    this.id,
     required this.project,
     required this.author,
     required this.title,
@@ -19,11 +21,12 @@ class NewsModel {
 
   factory NewsModel.fromJson(Map<String, dynamic> json) {
     return NewsModel(
+      id: json['id'] ?? 0,
       project: Project.fromJson(json['project']),
       author: Author.fromJson(json['author']),
-      title: json['title'] ,
-      summary: json['summary'] ,
-      description: json['description'] ,
+      title: json['title'],
+      summary: json['summary'],
+      description: json['description'],
       createdOn: json['created_on'] != null
           ? DateFormat('yyyy-MM-dd').parse(json['created_on'])
           : null,
@@ -32,15 +35,15 @@ class NewsModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'news' : {
-      'project_id': project.id,
-      'author_id': author.id,
-      'title': title,
-      'summary': summary,
-      'description': description,
-      'created_on': createdOn != null
-          ? DateFormat('yyyy-MM-dd').format(createdOn!)
-          : null,
+      'news': {
+        'project_id': project.id,
+        'author_id': author.id,
+        'title': title,
+        'summary': summary,
+        'description': description,
+        'created_on': createdOn != null
+            ? DateFormat('yyyy-MM-dd').format(createdOn!)
+            : null,
       }
     };
   }

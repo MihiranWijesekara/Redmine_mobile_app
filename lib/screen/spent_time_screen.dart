@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/spent_time_model.dart';
 import 'package:redmine_mobile_app/screen/add_spent_time_screen.dart';
+import 'package:redmine_mobile_app/screen/edit_spentTime.dart';
 
 class SpentTimeScreen extends StatefulWidget {
   const SpentTimeScreen({super.key});
@@ -95,7 +96,8 @@ class _SpentTimeScreenState extends State<SpentTimeScreen> {
                                   Text(
                                     timeEntry.id.toString(),
                                     style: TextStyle(
-                                      color: Color(0xFF626264).withOpacity(0.2),
+                                      color: const Color(0xFF626264)
+                                          .withOpacity(0.2),
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -266,7 +268,14 @@ class _SpentTimeScreenState extends State<SpentTimeScreen> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditSpenttime()),
+                                      );
+                                    },
                                     icon: const Icon(
                                       Icons.edit,
                                       color: Color.fromARGB(255, 10, 44, 213),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/issues_model.dart';
 import 'package:redmine_mobile_app/screen/add_issues.dart';
+import 'package:redmine_mobile_app/screen/edit_issues.dart';
 import 'package:redmine_mobile_app/widget/Issues_priority_container.dart';
 
 class IssuesList extends StatefulWidget {
@@ -180,6 +181,12 @@ class _IssuesListState extends State<IssuesList> {
                                           const SizedBox(
                                             width: 40,
                                           ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
                                           IconButton(
                                             onPressed: () async {
                                               try {
@@ -221,7 +228,14 @@ class _IssuesListState extends State<IssuesList> {
                                             ),
                                           ),
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const EditIssues()),
+                                              );
+                                            },
                                             icon: const Icon(
                                               Icons.edit,
                                               color: Color.fromARGB(
