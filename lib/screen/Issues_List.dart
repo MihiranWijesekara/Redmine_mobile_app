@@ -3,7 +3,6 @@ import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/issues_model.dart';
 import 'package:redmine_mobile_app/screen/add_issues.dart';
 import 'package:redmine_mobile_app/widget/Issues_priority_container.dart';
-import 'package:intl/intl.dart';
 
 class IssuesList extends StatefulWidget {
   const IssuesList({super.key});
@@ -66,7 +65,7 @@ class _IssuesListState extends State<IssuesList> {
                                   gradient: const LinearGradient(
                                     colors: [
                                       Color(0xFF68F2EB),
-                                      Color(0xFF68F2EB), //0xFFE3CEF8
+                                      Color(0xFF68F2EB),
                                     ],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
@@ -178,6 +177,57 @@ class _IssuesListState extends State<IssuesList> {
                                               fontSize: 18,
                                             ),
                                           ),
+                                          const SizedBox(
+                                            width: 40,
+                                          ),
+                                          IconButton(
+                                            onPressed: () async {
+                                              try {
+                                                if (issues.id != null) {
+                                                  await apiService
+                                                      .deleteIssue(issues.id!);
+                                                  setState(() {
+                                                    snapshot.data!
+                                                        .removeAt(index);
+                                                  });
+                                                  // ignore: use_build_context_synchronously
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Issue deleted successfully')),
+                                                  );
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                        content: Text(
+                                                            'Issue ID is missing. Cannot delete issue.')),
+                                                  );
+                                                }
+                                              } catch (error) {
+                                                // ignore: use_build_context_synchronously
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Failed to delete issue: $error')),
+                                                );
+                                              }
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              color: Color.fromARGB(
+                                                  255, 10, 44, 213),
+                                            ),
+                                          ),
                                         ],
                                       )
                                     ],
@@ -196,7 +246,7 @@ class _IssuesListState extends State<IssuesList> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddIssues()),
+            MaterialPageRoute(builder: (context) => const AddIssues()),
           );
         },
         backgroundColor: const Color(0xFF68B0AB),

@@ -224,39 +224,69 @@ class ApiService {
   }
 
   //Add News
- Future<NewsModel?> addNews(NewsModel newsModel) async {
-  const String url = "http://192.168.0.9/projects/gsmb-project/news.json";
-  String username = 'user';
-  String password = 'mLM:jDE:5h/T';
-  String basicAuth =
-      'Basic ' + base64Encode(utf8.encode('$username:$password'));
+  Future<NewsModel?> addNews(NewsModel newsModel) async {
+    const String url = "http://192.168.0.9/projects/gsmb-project/news.json";
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
-  try {
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": basicAuth,
-      },
-      body: json.encode(newsModel.toJson()),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": basicAuth,
+        },
+        body: json.encode(newsModel.toJson()),
+      );
 
-    print("Response Status code: ${response.statusCode}");
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      print("Response: ${response.body}");
-      return NewsModel.fromJson(json.decode(response.body));
-    } else if (response.statusCode == 204) {
-      print("News successfully added, no content returned.");
-      return null; 
-    } else {
-      print("Failed to add News. Status Code: ${response.statusCode}");
-      print("Response body: ${response.body}");
+      print("Response Status code: ${response.statusCode}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Response: ${response.body}");
+        return NewsModel.fromJson(json.decode(response.body));
+      } else if (response.statusCode == 204) {
+        print("News successfully added, no content returned.");
+        return null;
+      } else {
+        print("Failed to add News. Status Code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to add News");
+      }
+    } catch (error) {
+      print("Error: $error");
       throw Exception("Failed to add News");
     }
-  } catch (error) {
-    print("Error: $error");
-    throw Exception("Failed to add News");
   }
-}
 
+//Issues delete
+  Future<void> deleteIssue(int issueId) async {
+    final url = Uri.parse('http://192.168.0.9/issues/$issueId.json');
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    final String basicAuth =
+        'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': basicAuth,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print("Issue deleted successfully.");
+      } else {
+        print("Failed to delete issue. Status code: ${response.statusCode}");
+        throw Exception(
+            "Failed to delete issue. Status code: ${response.statusCode}");
+      }
+    } catch (error) {
+      print("Error deleting issue: $error");
+      throw Exception("Error deleting issue: $error");
+    }
+  }
+  // Spent times delete
+  
 }
