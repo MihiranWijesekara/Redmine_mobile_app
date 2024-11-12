@@ -72,7 +72,7 @@ class _SpentTimeScreenState extends State<SpentTimeScreen> {
                               Row(
                                 children: [
                                   const Text(
-                                    "Issues  : ",
+                                    "Project  : ",
                                     style: TextStyle(
                                       color: Color(0xFF626264),
                                       fontSize: 20,
@@ -220,6 +220,57 @@ class _SpentTimeScreenState extends State<SpentTimeScreen> {
                                     ),
                                     softWrap: true,
                                     overflow: TextOverflow.visible,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      try {
+                                        if (timeEntry.id != null) {
+                                          await apiService
+                                              .deleteSpentTime(timeEntry.id!);
+                                          setState(() {
+                                            snapshot.data!.removeAt(index);
+                                          });
+                                          // ignore: use_build_context_synchronously
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Spent Time deleted successfully')),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Spent Time ID is missing. Cannot delete Spent Time.')),
+                                          );
+                                        }
+                                      } catch (error) {
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Failed to delete Spent Time: $error')),
+                                        );
+                                      }
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Color.fromARGB(255, 213, 5, 19),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.edit,
+                                      color: Color.fromARGB(255, 10, 44, 213),
+                                    ),
                                   ),
                                 ],
                               ),

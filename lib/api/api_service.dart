@@ -287,6 +287,34 @@ class ApiService {
       throw Exception("Error deleting issue: $error");
     }
   }
+
   // Spent times delete
-  
+  Future<void> deleteSpentTime(int spentTimeId) async {
+    final url = Uri.parse('http://192.168.0.9/time_entries/$spentTimeId.json');
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    final String basicAuth =
+        'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': basicAuth,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print("Spent time deleted successfully.");
+      } else {
+        print(
+            "Failed to delete Spent time. Status code: ${response.statusCode}");
+        throw Exception(
+            "Failed to delete Spent time. Status code: ${response.statusCode}");
+      }
+    } catch (error) {
+      print("Error deleting Spent time: $error");
+      throw Exception("Error deleting Spent time: $error");
+    }
+  }
 }
