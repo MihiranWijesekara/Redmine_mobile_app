@@ -36,7 +36,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 }
 
-
 class CalendarYear extends StatefulWidget {
   const CalendarYear({super.key});
 
@@ -68,23 +67,10 @@ class _CalendarYearState extends State<CalendarYear> {
   }
 
   Future<void> fetchIssues() async {
-    const String url = "http://192.168.0.9/projects/gsmb-project/issues.json";
-    try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        List<dynamic> issuesData = json.decode(response.body)['issues'];
-        setState(() {
-          issues = issuesData
-              .map((json) => IssuesModel.fromJson(json))
-              .cast<IssuesModel>()
-              .toList();
-        });
-      } else {
-        print("Failed to fetch issues, status code: ${response.statusCode}");
-      }
-    } catch (error) {
-      print("Error fetching issues: $error");
-    }
+    List<IssuesModel> fetchedIssues = await apiService.fetchIssues();
+    setState(() {
+      issues = fetchedIssues;
+    });
   }
 
   @override
@@ -204,17 +190,21 @@ class _CalendarYearState extends State<CalendarYear> {
                           ),
                         ],
                       ),
+                      // Inside the `Stack` widget for each calendar day
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
+                          // Displaying the day number in the center
                           Text(
                             dayNumber.toString(),
                             style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
-                          if (hasTask)
+                          if (hasTask) ...[
+                            // Displaying icons if task exists
                             Positioned(
                               bottom: 4,
                               child: Row(
@@ -238,10 +228,32 @@ class _CalendarYearState extends State<CalendarYear> {
                                         DateFormat('yyyy-MM-dd').format(date))
                                       const Icon(Icons.arrow_back,
                                           color: Colors.red, size: 20),
-                                  ]
+                                  ],
                                 ],
                               ),
                             ),
+
+                            Positioned(
+                              top: 1,
+                              right: 2,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 235, 234, 234),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  "#${task.id}".toString(),
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 7, 7, 7),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
