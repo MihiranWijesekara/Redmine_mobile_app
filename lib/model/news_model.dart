@@ -2,28 +2,29 @@ import 'package:intl/intl.dart';
 
 class NewsModel {
   final int? id;
-  final Project project;
-  final Author author;
-  final String title;
-  final String summary;
-  final String description;
+  final Project? project;
+  final Author? author;
+  final String? title;
+  final String? summary;
+  final String? description;
   final DateTime? createdOn;
 
   NewsModel({
     this.id,
-    required this.project,
-    required this.author,
-    required this.title,
-    required this.summary,
-    required this.description,
+    this.project,
+    this.author,
+    this.title,
+    this.summary,
+    this.description,
     this.createdOn,
   });
 
   factory NewsModel.fromJson(Map<String, dynamic> json) {
     return NewsModel(
       id: json['id'] ?? 0,
-      project: Project.fromJson(json['project']),
-      author: Author.fromJson(json['author']),
+      project:
+          json['project'] != null ? Project.fromJson(json['project']) : null,
+      author: json['author'] != null ? Author.fromJson(json['author']) : null,
       title: json['title'],
       summary: json['summary'],
       description: json['description'],
@@ -36,8 +37,8 @@ class NewsModel {
   Map<String, dynamic> toJson() {
     return {
       'news': {
-        'project_id': project.id,
-        'author_id': author.id,
+        'project_id': project?.id,
+        'author_id': author?.id,
         'title': title,
         'summary': summary,
         'description': description,
@@ -57,7 +58,7 @@ class Project {
 
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
-      id: json['id'],
+      id: json['id'] ?? 0, // Default id if missing
       name: json['name'],
     );
   }
@@ -78,7 +79,7 @@ class Author {
 
   factory Author.fromJson(Map<String, dynamic> json) {
     return Author(
-      id: json['id'],
+      id: json['id'] ?? 0, // Default id if missing
       name: json['name'],
     );
   }

@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:redmine_mobile_app/model/issues_model.dart';
 import 'package:redmine_mobile_app/model/news_model.dart';
 import 'package:redmine_mobile_app/model/project_overview.dart';
+import 'package:redmine_mobile_app/model/single_news_model.dart';
+import 'package:redmine_mobile_app/model/single_spentTime_model.dart';
 import 'package:redmine_mobile_app/model/spent_time_model.dart';
 import 'package:redmine_mobile_app/model/tracker_model.dart';
 
@@ -344,6 +346,95 @@ class ApiService {
     } catch (error) {
       print("Error deleting News: $error");
       throw Exception("Error deleting News: $error");
+    }
+  }
+
+  //fetch news id data
+  Future<SingleNewsModel> fetchNewsId(int newsId) async {
+    final String url = 'http://192.168.0.9/news/$newsId.json';
+
+    try {
+      final responce = await http.get(Uri.parse(url));
+      if (responce.statusCode == 200) {
+        SingleNewsModel singleNewsModel =
+            SingleNewsModel.fromJson(json.decode(responce.body));
+
+        return singleNewsModel;
+      } else {
+        print("Failed to fetch product. status code: ${responce.statusCode} ");
+        throw Exception("Failed to fetch product");
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw Exception("Faild to fetch products");
+    }
+  }
+
+  //Udpate News
+  Future<SingleNewsModel?> updatedNews(
+      int newsId, SingleNewsModel singleNewsModel) async {
+    final String url = "http://192.168.0.9/news/$newsId.json";
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    try {
+      final responce = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": basicAuth,
+        },
+        body: json.encode(singleNewsModel.toJson()),
+      );
+    } catch (error) {
+      print("Error: $error ");
+      throw Exception("Failed to update News");
+    }
+  }
+
+  //fetch Spent Time id data
+  Future<SingleSpenttimeModel> fetchSpentTimeId(int spentTimeId) async {
+    final String url = 'http://192.168.0.9/time_entries/$spentTimeId.json';
+
+    try {
+      final responce = await http.get(Uri.parse(url));
+      if (responce.statusCode == 200) {
+        SingleSpenttimeModel singletimeEntry =
+            SingleSpenttimeModel.fromJson(json.decode(responce.body));
+
+        return singletimeEntry;
+      } else {
+        print(
+            "Failed to fetch Spengt Time. status code: ${responce.statusCode} ");
+        throw Exception("Failed to fetch Spengt Time");
+      }
+    } catch (error) {
+      print("Error: $error");
+      throw Exception("Faild to fetch Spengt Time");
+    }
+  }
+
+  //Update spent time
+    Future<SingleSpenttimeModel?> updatedSpentTime(
+      int spentTimeId, SingleSpenttimeModel singleSpenttimeModel) async {
+    final String url = 'http://192.168.0.9/time_entries/$spentTimeId.json';
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    try {
+      final responce = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": basicAuth,
+        },
+        body: json.encode(singleSpenttimeModel.toJson()),
+      );
+    } catch (error) {
+      print("Error: $error ");
+      throw Exception("Failed to update News");
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/news_model.dart';
 import 'package:redmine_mobile_app/screen/edit_news.dart';
 import 'package:redmine_mobile_app/screen/news_add_screen.dart';
+import 'package:redmine_mobile_app/screen/single_news_screen.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -50,114 +51,127 @@ class _NewsScreenState extends State<NewsScreen> {
             itemBuilder: (context, index) {
               NewsModel news = snapshot.data![index];
 
-              return Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(255, 226, 224, 224),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Scrollbar(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Title: ${news.title}",
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                const TextSpan(
-                                  text: "Summary: ",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                TextSpan(
-                                  text: news.summary,
-                                  style: const TextStyle(
-                                      fontSize: 18, color: Colors.black),
-                                ),
-                              ],
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SingleNewsScreen(newsId: news.id!),
+                      ));
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color.fromARGB(255, 226, 224, 224),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Scrollbar(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Title: ${news.title}",
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                const TextSpan(
-                                  text: "Description: ",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                TextSpan(
-                                  text: news.description,
-                                  style: const TextStyle(
-                                      fontSize: 18, color: Colors.black),
-                                ),
-                              ],
+                            const SizedBox(height: 10),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: "Summary: ",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: news.summary,
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.black),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Created On: ${DateFormat('yyyy-MM-dd').format(news.createdOn!)}",
-                            style: const TextStyle(
-                                fontSize: 18, fontStyle: FontStyle.italic),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  try {
-                                    if (news.id != null) {
-                                      await apiService.deleteNews(news.id!);
-                                      setState(() {
-                                        snapshot.data!.removeAt(index);
-                                      });
+                            const SizedBox(height: 5),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  const TextSpan(
+                                    text: "Description: ",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  TextSpan(
+                                    text: news.description,
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "Created On: ${DateFormat('yyyy-MM-dd').format(news.createdOn!)}",
+                              style: const TextStyle(
+                                  fontSize: 18, fontStyle: FontStyle.italic),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    try {
+                                      if (news.id != null) {
+                                        await apiService.deleteNews(news.id!);
+                                        setState(() {
+                                          snapshot.data!.removeAt(index);
+                                        });
+                                        // ignore: use_build_context_synchronously
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'News deleted successfully')),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'News ID is missing. Cannot delete News.')),
+                                        );
+                                      }
+                                    } catch (error) {
                                       // ignore: use_build_context_synchronously
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(
+                                        SnackBar(
                                             content: Text(
-                                                'News deleted successfully')),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'News ID is missing. Cannot delete News.')),
+                                                'Failed to delete News: $error')),
                                       );
                                     }
-                                  } catch (error) {
-                                    // ignore: use_build_context_synchronously
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'Failed to delete News: $error')),
-                                    );
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Color.fromARGB(255, 213, 5, 19),
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Color.fromARGB(255, 213, 5, 19),
+                                  ),
                                 ),
-                              ),
+                                /*
                               IconButton(
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const EditNews()),
+                                      builder: (context) =>
+                                          EditNews(newsId: news.id!),
+                                    ),
                                   );
                                 },
                                 icon: const Icon(
@@ -165,9 +179,11 @@ class _NewsScreenState extends State<NewsScreen> {
                                   color: Color.fromARGB(255, 10, 44, 213),
                                 ),
                               ),
-                            ],
-                          )
-                        ],
+                              */
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

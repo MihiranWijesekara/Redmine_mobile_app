@@ -1,32 +1,35 @@
 class TimeEntry {
   final int? id;
   final Project? project;
-  final Issue issue;
-  final User user;
-  final Activity activity;
-  final double hours;
-  final String comments;
-  final String spentOn;
+  final Issue? issue;
+  final User? user;
+  final Activity? activity;
+  final double? hours;
+  final String? comments;
+  final String? spentOn;
 
   TimeEntry({
     this.id,
     this.project,
-    required this.issue,
-    required this.user,
-    required this.activity,
-    required this.hours,
-    required this.comments,
-    required this.spentOn,
+    this.issue,
+    this.user,
+    this.activity,
+    this.hours,
+    this.comments,
+    this.spentOn,
   });
 
   factory TimeEntry.fromJson(Map<String, dynamic> json) {
     return TimeEntry(
       id: json['id'],
-      project: Project.fromJson(json['project']),
-      issue: Issue.fromJson(json['issue']),
-      user: User.fromJson(json['user']),
-      activity: Activity.fromJson(json['activity']),
-      hours: json['hours'],
+      project: json['project'] != null
+          ? Project.fromJson(json['project'])
+          : null, // Fix here
+      issue: json['issue'] != null ? Issue.fromJson(json['issue']) : null,
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      activity:
+          json['activity'] != null ? Activity.fromJson(json['activity']) : null,
+      hours: json['hours'] != null ? json['hours'].toDouble() : null,
       comments: json['comments'],
       spentOn: json['spent_on'],
     );
@@ -35,9 +38,9 @@ class TimeEntry {
   Map<String, dynamic> toJson() {
     return {
       'time_entry': {
-        'issue_id': issue.id,
-        'user_id': user.id,
-        'activity_id': activity.id,
+        'issue_id': issue?.id,
+        'user_id': user?.id,
+        'activity_id': activity?.id,
         'hours': hours,
         'comments': comments,
         'spent_on': spentOn,
@@ -70,6 +73,7 @@ class Project {
 class Issue {
   final int id;
   final String? name;
+
   Issue({this.name, required this.id});
 
   factory Issue.fromJson(Map<String, dynamic> json) {

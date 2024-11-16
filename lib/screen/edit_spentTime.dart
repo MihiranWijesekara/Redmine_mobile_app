@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/issues_model.dart';
+import 'package:redmine_mobile_app/model/single_spentTime_model.dart';
 import 'package:redmine_mobile_app/widget/add_issus_input.dart';
 
 class EditSpenttime extends StatefulWidget {
-  const EditSpenttime({super.key});
+  final SingleSpenttimeModel singleSpenttimeModel;
+  const EditSpenttime({super.key, required this.singleSpenttimeModel});
 
   @override
   State<EditSpenttime> createState() => _EditSpenttimeState();
@@ -16,12 +18,6 @@ class _EditSpenttimeState extends State<EditSpenttime> {
 
   int? selectedIssueId;
   List<IssuesModel> issues = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchIssues();
-  }
 
   Future<void> fetchIssues() async {
     try {
@@ -49,6 +45,19 @@ class _EditSpenttimeState extends State<EditSpenttime> {
     "Development": 9,
     "Design": 8,
   };
+  @override
+  void initState() {
+    super.initState();
+    fetchIssues();
+    hours = widget.singleSpenttimeModel.hours!;
+    comments = widget.singleSpenttimeModel.comments!;
+    selectedIssueId = widget.singleSpenttimeModel.issue?.id;
+    selectedUserId = widget.singleSpenttimeModel.user?.id;
+    selectedActivityIds = widget.singleSpenttimeModel.activity?.id;
+    selectedDate = widget.singleSpenttimeModel.spentOn != null
+        ? DateTime.parse(widget.singleSpenttimeModel.spentOn!)
+        : null;
+  }
 
   DateTime? selectedDate;
   Future<void> _selectDate(BuildContext context) async {
@@ -164,21 +173,27 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                     SizedBox(
                       width: 230,
                       child: DropdownButtonFormField<String>(
-                        value: selectedUserType,
                         hint: const Text("Select User"),
+                        value: selectedUserId != null
+                            ? UserId.entries
+                                .firstWhere(
+                                    (entry) => entry.value == selectedUserId)
+                                .key
+                            : null,
                         decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 10),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                  color: Colors.black, width: 2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: const BorderSide(
-                                  color: Colors.black, width: 2),
-                            )),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 10),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide:
+                                const BorderSide(color: Colors.black, width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide:
+                                const BorderSide(color: Colors.black, width: 2),
+                          ),
+                        ),
                         items: <String>[
                           "Achintha",
                         ].map((String value) {
@@ -213,7 +228,10 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                     const SizedBox(width: 25),
                     SizedBox(
                       width: 230,
-                      child: TextField(
+                      child: TextFormField(
+                        initialValue: selectedDate != null
+                            ? "${selectedDate!.day.toString().padLeft(2, '0')}/${selectedDate!.month.toString().padLeft(2, '0')}/${selectedDate!.year}"
+                            : null,
                         readOnly: true,
                         onTap: () => _selectDate(context),
                         decoration: InputDecoration(
@@ -247,12 +265,32 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                         color: Color(0xFF706E6E),
                       ),
                     ),
-                    AddIssusInput(
-                      text: "Enter Spent Hours",
-                      onChanged: (value) {
-                        hours = double.parse(value);
-                      },
-                    ),
+                    SizedBox(
+                      width: 230,
+                      child: SizedBox(
+                        height: 50,
+                        child: TextFormField(
+                          initialValue: hours.toString(),
+                          maxLines: null,
+                          expands: true,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                  color: Colors.black, width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                  color: Colors.black, width: 2),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            hours = double.parse(value);
+                          },
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -269,12 +307,32 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                       ),
                     ),
                     const SizedBox(width: 1),
-                    AddIssusInput(
-                      text: "Enter Comment",
-                      onChanged: (value) {
-                        comments = value;
-                      },
-                    ),
+                    SizedBox(
+                      width: 230,
+                      child: SizedBox(
+                        height: 100,
+                        child: TextFormField(
+                          initialValue: comments,
+                          maxLines: null,
+                          expands: true,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                  color: Colors.black, width: 2),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: const BorderSide(
+                                  color: Colors.black, width: 2),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            comments = value;
+                          },
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -294,7 +352,13 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                     SizedBox(
                       width: 230,
                       child: DropdownButtonFormField<String>(
-                        value: selectedActivityType,
+                        //   value: selectedActivityType,
+                        value: selectedActivityIds != null
+                            ? ActivityIds.entries
+                                .firstWhere((entry) =>
+                                    entry.value == selectedActivityIds)
+                                .key
+                            : null,
                         hint: const Text("Select Activity"),
                         decoration: InputDecoration(
                             contentPadding:
@@ -331,23 +395,89 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    /*
-                    final newtimeEntry = TimeEntry(
-                      issue: Issue(id: selectedIssueId ?? 0),
-                      user: User(
-                          id: selectedUserId ?? 0,
-                          name: selectedUserType ?? ''),
-                      spentOn: getFormattedDate(),
-                      hours: hours,
-                      comments: comments,
-                      activity: Activity(
-                          id: selectedActivityIds ?? 0,
-                          name: selectedActivityType ?? ''),
-                    );
-                    await apiService.addSpentTime(newtimeEntry);
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        final SingleSpenttimeModel singleSpenttimeModel =
+                            SingleSpenttimeModel(
+                          issue: Issue(id: selectedIssueId ?? 0),
+                          user: User(
+                              id: selectedUserId ?? 0,
+                              name: selectedUserType ?? ''),
+                          spentOn: getFormattedDate(),
+                          hours: hours,
+                          comments: comments,
+                          activity: Activity(
+                              id: selectedActivityIds ?? 0,
+                              name: selectedActivityType ?? ''),
+                        );
 
-                    _formKey.currentState?.reset();
-                    */
+                        final result = await apiService.updatedSpentTime(
+                            widget.singleSpenttimeModel.id!,
+                            singleSpenttimeModel);
+
+                        if (result != null) {
+                          // Show success dialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Success"),
+                                content: const Text(
+                                    "Spent Time saved successfully!"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context)
+                                          .pop(); // Close both the dialog and the add screen
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Information"),
+                                content:
+                                    const Text("Spent Time saved successfully"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      } catch (error) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Error"),
+                              content:
+                                  Text("Failed to update Spent Time: $error"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF94cc80),

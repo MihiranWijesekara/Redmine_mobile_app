@@ -3,6 +3,7 @@ import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/spent_time_model.dart';
 import 'package:redmine_mobile_app/screen/add_spent_time_screen.dart';
 import 'package:redmine_mobile_app/screen/edit_spentTime.dart';
+import 'package:redmine_mobile_app/screen/single_SpentTime.dart';
 
 class SpentTimeScreen extends StatefulWidget {
   const SpentTimeScreen({super.key});
@@ -46,244 +47,241 @@ class _SpentTimeScreenState extends State<SpentTimeScreen> {
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final timeEntry = snapshot.data![index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Container(
-                    height: 255,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFFD1FEC4),
-                          Color(0xFFD1FEC4),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SingleSpenttime(spentTimeId: timeEntry.id!),
+                        ));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Container(
+                      height: 255,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xFFD1FEC4),
+                            Color(0xFFD1FEC4),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Scrollbar(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Project  : ",
-                                    style: TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Scrollbar(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Project  : ",
+                                      style: TextStyle(
+                                        color: Color(0xFF626264),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 30),
-                                  Expanded(
-                                    child: Text(
-                                      timeEntry.project!.name,
+                                    const SizedBox(width: 30),
+                                    Expanded(
+                                      child: Text(
+                                        timeEntry.project!.name,
+                                        style: const TextStyle(
+                                          color: Color(0xFF626264),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                    Text(
+                                      timeEntry.id.toString(),
+                                      style: TextStyle(
+                                        color: const Color(0xFF626264)
+                                            .withOpacity(0.2),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Activity  : ",
+                                      style: TextStyle(
+                                        color: Color(0xFF626264),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 25),
+                                    Expanded(
+                                      child: Text(
+                                        timeEntry.activity!.name,
+                                        style: const TextStyle(
+                                          color: Color(0xFF626264),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Comment  : ",
+                                      style: TextStyle(
+                                        color: Color(0xFF626264),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        timeEntry.comments!,
+                                        style: const TextStyle(
+                                          color: Color(0xFF626264),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "User  : ",
+                                      style: TextStyle(
+                                        color: Color(0xFF626264),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 55),
+                                    Expanded(
+                                      child: Text(
+                                        timeEntry.user!.name,
+                                        style: const TextStyle(
+                                          color: Color(0xFF626264),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        softWrap: true,
+                                        overflow: TextOverflow.visible,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Date  : ",
+                                      style: TextStyle(
+                                        color: Color(0xFF626264),
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      timeEntry.spentOn!,
                                       style: const TextStyle(
                                         color: Color(0xFF626264),
-                                        fontSize: 18,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       softWrap: true,
                                       overflow: TextOverflow.visible,
                                     ),
-                                  ),
-                                  Text(
-                                    timeEntry.id.toString(),
-                                    style: TextStyle(
-                                      color: const Color(0xFF626264)
-                                          .withOpacity(0.2),
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                    const SizedBox(width: 30),
+                                    const Text(
+                                      "Spent Hours  : ",
+                                      style: TextStyle(
+                                        color: Color(0xFF626264),
+                                        fontSize: 19,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Activity  : ",
-                                    style: TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 25),
-                                  Expanded(
-                                    child: Text(
-                                      timeEntry.activity.name,
+                                    Text(
+                                      timeEntry.hours.toString(),
                                       style: const TextStyle(
                                         color: Color(0xFF626264),
-                                        fontSize: 18,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       softWrap: true,
                                       overflow: TextOverflow.visible,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Comment  : ",
-                                    style: TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      timeEntry.comments,
-                                      style: const TextStyle(
-                                        color: Color(0xFF626264),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "User  : ",
-                                    style: TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 55),
-                                  Expanded(
-                                    child: Text(
-                                      timeEntry.user.name,
-                                      style: const TextStyle(
-                                        color: Color(0xFF626264),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Date  : ",
-                                    style: TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    timeEntry.spentOn,
-                                    style: const TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    softWrap: true,
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                  const SizedBox(width: 30),
-                                  const Text(
-                                    "Spent Hours  : ",
-                                    style: TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    timeEntry.hours.toString(),
-                                    style: const TextStyle(
-                                      color: Color(0xFF626264),
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    softWrap: true,
-                                    overflow: TextOverflow.visible,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () async {
-                                      try {
-                                        if (timeEntry.id != null) {
-                                          await apiService
-                                              .deleteSpentTime(timeEntry.id!);
-                                          setState(() {
-                                            snapshot.data!.removeAt(index);
-                                          });
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () async {
+                                        try {
+                                          if (timeEntry.id != null) {
+                                            await apiService
+                                                .deleteSpentTime(timeEntry.id!);
+                                            setState(() {
+                                              snapshot.data!.removeAt(index);
+                                            });
+                                            // ignore: use_build_context_synchronously
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'Spent Time deleted successfully')),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'Spent Time ID is missing. Cannot delete Spent Time.')),
+                                            );
+                                          }
+                                        } catch (error) {
                                           // ignore: use_build_context_synchronously
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
-                                            const SnackBar(
+                                            SnackBar(
                                                 content: Text(
-                                                    'Spent Time deleted successfully')),
-                                          );
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'Spent Time ID is missing. Cannot delete Spent Time.')),
+                                                    'Failed to delete Spent Time: $error')),
                                           );
                                         }
-                                      } catch (error) {
-                                        // ignore: use_build_context_synchronously
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                              content: Text(
-                                                  'Failed to delete Spent Time: $error')),
-                                        );
-                                      }
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Color.fromARGB(255, 213, 5, 19),
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Color.fromARGB(255, 213, 5, 19),
+                                      ),
                                     ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const EditSpenttime()),
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.edit,
-                                      color: Color.fromARGB(255, 10, 44, 213),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                 
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
