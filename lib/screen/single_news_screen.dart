@@ -3,6 +3,7 @@ import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/news_model.dart';
 import 'package:redmine_mobile_app/model/single_news_model.dart';
 import 'package:redmine_mobile_app/screen/edit_news.dart';
+import 'package:redmine_mobile_app/screen/news_screen.dart';
 
 class SingleNewsScreen extends StatefulWidget {
   final int newsId;
@@ -117,46 +118,44 @@ class _SingleNewsScreenState extends State<SingleNewsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      /*
-                                IconButton(
-                                  onPressed: () async {
-                                    try {
-                                      if (news.id != null) {
-                                        await apiService.deleteNews(news.id!);
-                                        setState(() {
-                                          snapshot.data!.removeAt(index);
-                                        });
-                                        // ignore: use_build_context_synchronously
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'News deleted successfully')),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'News ID is missing. Cannot delete News.')),
-                                        );
-                                      }
-                                    } catch (error) {
-                                      // ignore: use_build_context_synchronously
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Failed to delete News: $error')),
-                                      );
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Color.fromARGB(255, 213, 5, 19),
-                                  ),
+                      IconButton(
+                        onPressed: () async {
+                          try {
+                            if (singleNewsModel.id != null) {
+                              await apiService.deleteNews(singleNewsModel.id!);
+
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('News deleted successfully')),
+                              );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const NewsScreen(),
                                 ),
-                                */
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'News ID is missing. Cannot delete News.')),
+                              );
+                            }
+                          } catch (error) {
+                            // ignore: use_build_context_synchronously
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Failed to delete News: $error')),
+                            );
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Color.fromARGB(255, 213, 5, 19),
+                        ),
+                      ),
                       IconButton(
                         onPressed: () {
                           Navigator.push(

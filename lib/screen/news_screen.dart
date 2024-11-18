@@ -122,66 +122,6 @@ class _NewsScreenState extends State<NewsScreen> {
                               style: const TextStyle(
                                   fontSize: 18, fontStyle: FontStyle.italic),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                IconButton(
-                                  onPressed: () async {
-                                    try {
-                                      if (news.id != null) {
-                                        await apiService.deleteNews(news.id!);
-                                        setState(() {
-                                          snapshot.data!.removeAt(index);
-                                        });
-                                        // ignore: use_build_context_synchronously
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'News deleted successfully')),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'News ID is missing. Cannot delete News.')),
-                                        );
-                                      }
-                                    } catch (error) {
-                                      // ignore: use_build_context_synchronously
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Failed to delete News: $error')),
-                                      );
-                                    }
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Color.fromARGB(255, 213, 5, 19),
-                                  ),
-                                ),
-                                /*
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditNews(newsId: news.id!),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Color.fromARGB(255, 10, 44, 213),
-                                ),
-                              ),
-                              */
-                              ],
-                            ),
                           ],
                         ),
                       ),

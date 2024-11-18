@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:redmine_mobile_app/api/api_service.dart';
 import 'package:redmine_mobile_app/model/spent_time_model.dart';
 import 'package:redmine_mobile_app/screen/add_spent_time_screen.dart';
-import 'package:redmine_mobile_app/screen/edit_spentTime.dart';
 import 'package:redmine_mobile_app/screen/single_SpentTime.dart';
 
 class SpentTimeScreen extends StatefulWidget {
@@ -233,51 +232,6 @@ class _SpentTimeScreenState extends State<SpentTimeScreen> {
                                       softWrap: true,
                                       overflow: TextOverflow.visible,
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () async {
-                                        try {
-                                          if (timeEntry.id != null) {
-                                            await apiService
-                                                .deleteSpentTime(timeEntry.id!);
-                                            setState(() {
-                                              snapshot.data!.removeAt(index);
-                                            });
-                                            // ignore: use_build_context_synchronously
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Spent Time deleted successfully')),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'Spent Time ID is missing. Cannot delete Spent Time.')),
-                                            );
-                                          }
-                                        } catch (error) {
-                                          // ignore: use_build_context_synchronously
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content: Text(
-                                                    'Failed to delete Spent Time: $error')),
-                                          );
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.delete,
-                                        color: Color.fromARGB(255, 213, 5, 19),
-                                      ),
-                                    ),
-                                 
                                   ],
                                 ),
                               ],
