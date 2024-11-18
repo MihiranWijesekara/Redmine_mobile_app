@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:redmine_mobile_app/model/issues_model.dart';
 import 'package:redmine_mobile_app/model/news_model.dart';
 import 'package:redmine_mobile_app/model/project_overview.dart';
+import 'package:redmine_mobile_app/model/single_issues_model.dart';
 import 'package:redmine_mobile_app/model/single_news_model.dart';
 import 'package:redmine_mobile_app/model/single_spentTime_model.dart';
 import 'package:redmine_mobile_app/model/spent_time_model.dart';
@@ -416,7 +419,7 @@ class ApiService {
   }
 
   //Update spent time
-    Future<SingleSpenttimeModel?> updatedSpentTime(
+  Future<SingleSpenttimeModel?> updatedSpentTime(
       int spentTimeId, SingleSpenttimeModel singleSpenttimeModel) async {
     final String url = 'http://192.168.0.9/time_entries/$spentTimeId.json';
     String username = 'user';
@@ -431,6 +434,53 @@ class ApiService {
           "Authorization": basicAuth,
         },
         body: json.encode(singleSpenttimeModel.toJson()),
+      );
+    } catch (error) {
+      print("Error: $error ");
+      throw Exception("Failed to update News");
+    }
+  }
+
+  //Fetch single issues
+  Future<SingleIssuesModel?> fetchSingleIssuesId(int issueId) async {
+    final url = Uri.parse('http://192.168.0.9/issues/$issueId.json');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        return SingleIssuesModel.fromJson(jsonResponse['issue']);
+      } else {
+        print('Failed to fetch issue. Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      if (e is SocketException) {
+        print('No Internet Connection: $e');
+      } else if (e is TimeoutException) {
+        print('Request Timed Out: $e');
+      } else {
+        print('Unexpected Error: $e');
+      }
+      return null;
+    }
+  }
+  //Update single issues
+    Future<SingleIssuesModel?> updatedSingleIssues(
+      int issueId, SingleIssuesModel singleIssues) async {
+    final String url = 'http://192.168.0.9/issues/$issueId.json';
+    String username = 'user';
+    String password = 'mLM:jDE:5h/T';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    try {
+      final responce = await http.put(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": basicAuth,
+        },
+        body: json.encode(singleIssues.toJson()),
       );
     } catch (error) {
       print("Error: $error ");

@@ -54,164 +54,163 @@ class _SingleSpenttimeState extends State<SingleSpenttime> {
                 child: Scrollbar(
                   child: SingleChildScrollView(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              "Project  : ",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 13, 13, 14),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                "Project  : ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 13, 13, 14),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 30),
-                            Expanded(
-                              child: Text(
-                                singletimeEntry.project!.name,
+                              const SizedBox(width: 30),
+                              Expanded(
+                                child: Text(
+                                  singletimeEntry.project!.name,
+                                  style: const TextStyle(
+                                    color: Color(0xFF626264),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              const Text(
+                                "Activity  : ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 13, 13, 14),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 25),
+                              Expanded(
+                                child: Text(
+                                  singletimeEntry.activity?.name ?? '',
+                                  style: const TextStyle(
+                                    color: Color(0xFF626264),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              const Text(
+                                "Comment  : ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 13, 13, 14),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  singletimeEntry?.comments ?? '',
+                                  style: const TextStyle(
+                                    color: Color(0xFF626264),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              const Text(
+                                "User  : ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 13, 13, 14),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 55),
+                              Expanded(
+                                child: Text(
+                                  singletimeEntry.user?.name ?? '',
+                                  style: const TextStyle(
+                                    color: Color(0xFF626264),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              const Text(
+                                "create Date  : ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 13, 13, 14),
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                singletimeEntry.spentOn ?? '',
                                 style: const TextStyle(
                                   color: Color(0xFF626264),
-                                  fontSize: 18,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 softWrap: true,
                                 overflow: TextOverflow.visible,
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const Text(
-                              "Activity  : ",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 13, 13, 14),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Text(
+                                "Spent Hours  : ",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 13, 13, 14),
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 25),
-                            Expanded(
-                              child: Text(
-                                singletimeEntry.activity?.name ?? '',
-                                style: const TextStyle(
+                              Text(
+                                singletimeEntry.hours.toString(),
+                                style: TextStyle(
                                   color: Color(0xFF626264),
-                                  fontSize: 18,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 softWrap: true,
                                 overflow: TextOverflow.visible,
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const Text(
-                              "Comment  : ",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 13, 13, 14),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                singletimeEntry?.comments ?? '',
-                                style: const TextStyle(
-                                  color: Color(0xFF626264),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                softWrap: true,
-                                overflow: TextOverflow.visible,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const Text(
-                              "User  : ",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 13, 13, 14),
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 55),
-                            Expanded(
-                              child: Text(
-                                singletimeEntry.user?.name ?? '',
-                                style: const TextStyle(
-                                  color: Color(0xFF626264),
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                softWrap: true,
-                                overflow: TextOverflow.visible,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            const Text(
-                              "create Date  : ",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 13, 13, 14),
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              singletimeEntry.spentOn ?? '',
-                              style: const TextStyle(
-                                color: Color(0xFF626264),
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            Text(
-                              "Spent Hours  : ",
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 13, 13, 14),
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              singletimeEntry.hours.toString(),
-                              style: TextStyle(
-                                color: Color(0xFF626264),
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              softWrap: true,
-                              overflow: TextOverflow.visible,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  /*
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              /*
                                   IconButton(
                                     onPressed: () async {
                                       try {
@@ -253,24 +252,25 @@ class _SingleSpenttimeState extends State<SingleSpenttime> {
                                     ),
                                   ),
                                    */
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>  EditSpenttime(singleSpenttimeModel : singletimeEntry)),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Color.fromARGB(255, 10, 44, 213),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditSpenttime(
+                                            singleSpenttimeModel:
+                                                singletimeEntry)),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Color.fromARGB(255, 10, 44, 213),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                      ]
+                        ]),
                   ),
-                ),
                 ),
               );
             }));

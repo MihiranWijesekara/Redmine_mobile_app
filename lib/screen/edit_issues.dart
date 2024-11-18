@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:redmine_mobile_app/model/issues_model.dart';
+import 'package:redmine_mobile_app/api/api_service.dart';
+
+import 'package:redmine_mobile_app/model/single_issues_model.dart';
 import 'package:redmine_mobile_app/widget/IssueDropdown.dart';
 import 'package:redmine_mobile_app/widget/add_issus_input.dart';
 
 class EditIssues extends StatefulWidget {
-  const EditIssues({super.key});
+  final SingleIssuesModel singleIssuesModel;
+  const EditIssues({super.key, required this.singleIssuesModel});
 
   @override
   State<EditIssues> createState() => _EditIssuesState();
 }
 
 class _EditIssuesState extends State<EditIssues> {
+  final ApiService apiService = ApiService();
   final _formKey = GlobalKey<FormState>();
 
   String subject = '';
@@ -60,6 +64,24 @@ class _EditIssuesState extends State<EditIssues> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    subject = widget.singleIssuesModel.subject;
+    description = widget.singleIssuesModel.description;
+    estimatedHours = widget.singleIssuesModel.estimatedHours;
+    selectedIssueId = widget.singleIssuesModel.tracker?.id;
+    selectedStartDate = widget.singleIssuesModel.startDate != null
+        ? DateTime.parse(widget.singleIssuesModel.startDate!)
+        : null;
+    selectedDueDate = widget.singleIssuesModel.dueDate != null
+        ? DateTime.parse(widget.singleIssuesModel.dueDate!)
+        : null;
+    selectedstatusIds = widget.singleIssuesModel.status!.id;
+    selectedpriorityTypeIds = widget.singleIssuesModel.priority.id;
+    selecteddoneRationValue = widget.singleIssuesModel.doneRatio;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -98,21 +120,48 @@ class _EditIssuesState extends State<EditIssues> {
                         ),
                       ),
                       const SizedBox(width: 57),
-                      IssueDropdown(
-                        selectedValue: selectedIssueType,
-                        hintText: "Select issue type",
-                        items: const [
-                          "Bug",
-                          "Feature",
-                          "Support",
-                          "Documentation"
-                        ],
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedIssueType = newValue;
-                            selectedIssueId = issueTypeIds[newValue];
-                          });
-                        },
+                      SizedBox(
+                        width: 230,
+                        child: DropdownButtonFormField<String>(
+                          //   value: selectedActivityType,
+                          value: selectedIssueId != null
+                              ? issueTypeIds.entries
+                                  .firstWhere(
+                                      (entry) => entry.value == selectedIssueId)
+                                  .key
+                              : null,
+                          // hint: const Text("Select Activity"),
+                          decoration: InputDecoration(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                    color: Colors.black, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                    color: Colors.black, width: 2),
+                              )),
+                          items: <String>[
+                            "Bug",
+                            "Feature",
+                            "Support",
+                            "Documentation"
+                          ].map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedIssueType = newValue;
+                              selectedIssueId = issueTypeIds[newValue];
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -130,11 +179,31 @@ class _EditIssuesState extends State<EditIssues> {
                         ),
                       ),
                       const SizedBox(width: 57),
-                      AddIssusInput(
-                        text: "Enter Subject",
-                        onChanged: (value) {
-                          subject = value;
-                        },
+                      SizedBox(
+                        width: 230,
+                        child: SizedBox(
+                          height: 90,
+                          child: TextFormField(
+                            maxLines: null,
+                            expands: true,
+                            initialValue: subject,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                    color: Colors.black, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                    color: Colors.black, width: 2),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              subject = value;
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -155,9 +224,10 @@ class _EditIssuesState extends State<EditIssues> {
                         width: 230,
                         child: SizedBox(
                           height: 150,
-                          child: TextField(
+                          child: TextFormField(
                             maxLines: null,
                             expands: true,
+                            initialValue: description,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
@@ -192,7 +262,13 @@ class _EditIssuesState extends State<EditIssues> {
                       ),
                       const SizedBox(width: 70),
                       IssueDropdown(
-                        selectedValue: selectedStatus,
+                        //  selectedValue: selectedStatus,
+                        selectedValue: selectedstatusIds != null
+                            ? statusIds.entries
+                                .firstWhere(
+                                    (entry) => entry.value == selectedstatusIds)
+                                .key
+                            : null,
                         hintText: "Select status type",
                         items: const ["New", "In Progress", "Completed"],
                         onChanged: (String? newValue) {
@@ -218,7 +294,13 @@ class _EditIssuesState extends State<EditIssues> {
                       ),
                       const SizedBox(width: 60),
                       IssueDropdown(
-                        selectedValue: selectedPriority,
+                        //  selectedValue: selectedPriority,
+                        selectedValue: selectedpriorityTypeIds != null
+                            ? priorityTypeIds.entries
+                                .firstWhere((entry) =>
+                                    entry.value == selectedpriorityTypeIds)
+                                .key
+                            : null,
                         hintText: "Select priority type",
                         items: const [
                           "Low",
@@ -250,7 +332,14 @@ class _EditIssuesState extends State<EditIssues> {
                       ),
                       const SizedBox(width: 25),
                       IssueDropdown(
-                        selectedValue: selectedDoneRatio,
+                        // selectedValue: selectedDoneRatio,
+                        //selectedDoneRatio
+                        selectedValue: selecteddoneRationValue != null
+                            ? doneRationValueIds.entries
+                                .firstWhere((entry) =>
+                                    entry.value == selecteddoneRationValue)
+                                .key
+                            : null,
                         hintText: "Select Done Ratio ",
                         items: const [
                           "0%",
@@ -289,13 +378,13 @@ class _EditIssuesState extends State<EditIssues> {
                       const SizedBox(width: 30),
                       SizedBox(
                         width: 235,
-                        child: TextField(
+                        child: TextFormField(
+                          initialValue: selectedStartDate != null
+                              ? "${selectedStartDate!.day.toString().padLeft(2, '0')}/${selectedStartDate!.month.toString().padLeft(2, '0')}/${selectedStartDate!.year}"
+                              : null,
                           readOnly: true,
                           onTap: () => _selectDate(context, true),
                           decoration: InputDecoration(
-                            hintText: selectedStartDate != null
-                                ? "${selectedStartDate!.day}/${selectedStartDate!.month}/${selectedStartDate!.year}"
-                                : "Select a date",
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: const BorderSide(
@@ -326,13 +415,13 @@ class _EditIssuesState extends State<EditIssues> {
                       const SizedBox(width: 40),
                       SizedBox(
                         width: 230,
-                        child: TextField(
+                        child: TextFormField(
+                          initialValue: selectedDueDate != null
+                              ? "${selectedDueDate!.day.toString().padLeft(2, '0')}/${selectedDueDate!.month.toString().padLeft(2, '0')}/${selectedDueDate!.year}"
+                              : null,
                           readOnly: true,
                           onTap: () => _selectDate(context, false),
                           decoration: InputDecoration(
-                            hintText: selectedDueDate != null
-                                ? "${selectedDueDate!.day}/${selectedDueDate!.month}/${selectedDueDate!.year}"
-                                : "Select a date",
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15),
                               borderSide: const BorderSide(
@@ -361,11 +450,31 @@ class _EditIssuesState extends State<EditIssues> {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      AddIssusInput(
-                        text: "Enter Estimate time",
-                        onChanged: (value) {
-                          estimatedHours = double.parse(value);
-                        },
+                      SizedBox(
+                        width: 230,
+                        child: SizedBox(
+                          height: 50,
+                          child: TextFormField(
+                            maxLines: null,
+                            expands: true,
+                            initialValue: estimatedHours.toString(),
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                    color: Colors.black, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                    color: Colors.black, width: 2),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              estimatedHours = double.parse(value);
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -373,7 +482,88 @@ class _EditIssuesState extends State<EditIssues> {
                     height: 10,
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          final SingleIssuesModel singleIssues =
+                              SingleIssuesModel(
+                                  tracker: Tracker(id: selectedIssueId ?? 0),
+                                  subject: subject,
+                                  description: description,
+                                  status: Status(id: selectedstatusIds ?? 0),
+                                  priority: Priority(
+                                      id: selectedpriorityTypeIds ?? 0),
+                                  doneRatio: selecteddoneRationValue ?? 0,
+                                  startDate: getFormattedStartDate(),
+                                  dueDate: getFormattedDueDate(),
+                                  estimatedHours: estimatedHours);
+
+                          final result = await apiService.updatedSingleIssues(
+                              widget.singleIssuesModel.id!, singleIssues);
+                          if (result != null) {
+                            // Show success dialog
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Success"),
+                                  content:
+                                      const Text("Issues saved successfully!"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context)
+                                            .pop(); // Close both the dialog and the add screen
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Information"),
+                                  content:
+                                      const Text("Issues saved successfully"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text("OK"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        } catch (error) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text("Error"),
+                                content:
+                                    Text("Failed to update Issues: $error"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("OK"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 16, 134, 231),
                       padding: const EdgeInsets.symmetric(
