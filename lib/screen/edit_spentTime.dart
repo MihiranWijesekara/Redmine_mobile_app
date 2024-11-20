@@ -174,7 +174,8 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                       width: 230,
                       child: DropdownButtonFormField<String>(
                         hint: const Text("Select User"),
-                        value: selectedUserId != null
+                        value: selectedUserId != null &&
+                                UserId.containsValue(selectedUserId)
                             ? UserId.entries
                                 .firstWhere(
                                     (entry) => entry.value == selectedUserId)
@@ -353,7 +354,9 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                       width: 230,
                       child: DropdownButtonFormField<String>(
                         //   value: selectedActivityType,
-                        value: selectedActivityIds != null
+
+                        value: selectedActivityIds != null &&
+                                ActivityIds.containsValue(selectedActivityIds)
                             ? ActivityIds.entries
                                 .firstWhere((entry) =>
                                     entry.value == selectedActivityIds)
@@ -410,7 +413,6 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                               id: selectedActivityIds ?? 0,
                               name: selectedActivityType ?? ''),
                         );
-                        
 
                         final result = await apiService.updatedSpentTime(
                             widget.singleSpenttimeModel.id!,

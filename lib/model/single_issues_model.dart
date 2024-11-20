@@ -64,6 +64,7 @@ class SingleIssuesModel {
       'status_id': status!.id,
     };
 
+    // ignore: unnecessary_null_comparison
     return {'issue': data..removeWhere((key, value) => value == null)};
   }
 

@@ -81,12 +81,14 @@ class _EditNewsState extends State<EditNews> {
                         child: DropdownButtonFormField<String>(
                           //  value: selectedUserType,
                           hint: const Text("Select Project"),
-                          value: selectedProjectId != null
+                          value: selectedProjectId != null &&
+                                  ProjectId.containsValue(selectedProjectId)
                               ? ProjectId.entries
                                   .firstWhere((entry) =>
                                       entry.value == selectedProjectId)
                                   .key
                               : null,
+
                           decoration: InputDecoration(
                               contentPadding:
                                   const EdgeInsets.symmetric(horizontal: 10),
@@ -193,27 +195,26 @@ class _EditNewsState extends State<EditNews> {
                       SizedBox(
                         width: 230,
                         child: SizedBox(
-                          height: 55,
+                          height: 70,
                           child: TextFormField(
-                            maxLines: null,
-                            expands: true,
-                            initialValue: title,
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                    color: Colors.black, width: 2),
+                              maxLines: null,
+                              expands: true,
+                              initialValue: title,
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                      color: Colors.black, width: 2),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: const BorderSide(
+                                      color: Colors.black, width: 2),
+                                ),
                               ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: const BorderSide(
-                                    color: Colors.black, width: 2),
-                              ),
-                            ),
-                            onChanged: (value) {
-                              title = value;
-                            },
-                          ),
+                              onChanged: (value) {
+                                title = value;
+                              }),
                         ),
                       )
                     ],
@@ -235,7 +236,7 @@ class _EditNewsState extends State<EditNews> {
                       SizedBox(
                         width: 230,
                         child: SizedBox(
-                          height: 70,
+                          height: 80,
                           child: TextFormField(
                             initialValue: summary,
                             maxLines: null,

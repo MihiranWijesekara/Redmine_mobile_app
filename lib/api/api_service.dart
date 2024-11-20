@@ -43,31 +43,47 @@ class ApiService {
 
   //Fetch Spent time List
   Future<List<TimeEntry>> fetchSpenttime() async {
-    const String url =
-        "http://192.168.0.9/projects/gsmb-project/time_entries.json";
+    const String url = "https://achinthamihiran2.planio.com/time_entries.json";
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
 
     try {
-      final response = await http.get(Uri.parse(url));
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
+
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
-        List<dynamic> spentTimeData = responseData['time_entries'];
 
-        List<TimeEntry> spentTime = spentTimeData
-            .map((json) => TimeEntry.fromJson(json))
-            .cast<TimeEntry>()
-            .toList();
+        if (responseData['time_entries'] is List) {
+          List<dynamic> spentTimeData = responseData['time_entries'];
+          List<TimeEntry> spentTime = spentTimeData
+              .map((json) => TimeEntry.fromJson(json))
+              .cast<TimeEntry>()
+              .toList();
 
-        return spentTime;
+          return spentTime;
+        } else if (responseData['time_entries'] is Map) {
+          Map<String, dynamic> spentTimeMap = responseData['time_entries'];
+          TimeEntry timeEntry = TimeEntry.fromJson(spentTimeMap);
+          return [timeEntry];
+        } else {
+          throw Exception("Unexpected data structure for 'time_entries'");
+        }
       } else {
         print(
             "Failed to fetch the Spent Time, status code: ${response.statusCode}");
         print("Response body: ${response.body}");
-        throw Exception("Failed to fetch Spent Time data ");
+        throw Exception("Failed to fetch Spent Time data");
       }
     } catch (error) {
       print("Error: $error");
-      throw Exception("Failed to Spent Time issues");
+      throw Exception("Failed to fetch Spent Time data");
     }
   }
 
@@ -173,25 +189,35 @@ class ApiService {
 
   //Fetch News
   Future<List<NewsModel>> fetchNews() async {
-    const String url = "http://192.168.0.9/news.json";
+    const String url =
+        "https://achinthamihiran2.planio.com/projects/gsmb-project/news.json";
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
 
     try {
-      final response = await http.get(Uri.parse(url));
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
+
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
 
         if (responseData['news'] is List) {
-          List<dynamic> NewsModelData = responseData['news'];
+          List<dynamic> newsModelData = responseData['news'];
           List<NewsModel> newsModel =
-              NewsModelData.map((json) => NewsModel.fromJson(json)).toList();
+              newsModelData.map((json) => NewsModel.fromJson(json)).toList();
           return newsModel;
         } else if (responseData['news'] is Map) {
           Map<String, dynamic> newsModelMap = responseData['news'];
           NewsModel newsModel = NewsModel.fromJson(newsModelMap);
           return [newsModel];
         } else {
-          throw Exception("Unexpected data structure for 'News'");
+          throw Exception("Unexpected data structure for 'news'");
         }
       } else {
         print("Failed to fetch the News, status code: ${response.statusCode}");
@@ -230,11 +256,12 @@ class ApiService {
 
   //Add News
   Future<NewsModel?> addNews(NewsModel newsModel) async {
-    const String url = "http://192.168.0.9/projects/gsmb-project/news.json";
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    const String url =
+        "https://achinthamihiran2.planio.com/projects/gsmb-project/news.json";
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ' + base64Encode(utf8.encode('$username:$apiKey'));
 
     try {
       final response = await http.post(
@@ -325,11 +352,12 @@ class ApiService {
 
   // Delete News
   Future<void> deleteNews(int NewsId) async {
-    final url = Uri.parse('http://192.168.0.9/news/$NewsId.json');
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    final url =
+        Uri.parse('https://achinthamihiran2.planio.com/news/$NewsId.json');
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     final String basicAuth =
-        'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+        'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
 
     try {
       final response = await http.delete(
@@ -354,33 +382,44 @@ class ApiService {
 
   //fetch news id data
   Future<SingleNewsModel> fetchNewsId(int newsId) async {
-    final String url = 'http://192.168.0.9/news/$newsId.json';
+    final String url = 'https://achinthamihiran2.planio.com/news/$newsId.json';
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
 
     try {
-      final responce = await http.get(Uri.parse(url));
-      if (responce.statusCode == 200) {
-        SingleNewsModel singleNewsModel =
-            SingleNewsModel.fromJson(json.decode(responce.body));
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
 
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
+
+      if (response.statusCode == 200) {
+        SingleNewsModel singleNewsModel =
+            SingleNewsModel.fromJson(json.decode(response.body));
         return singleNewsModel;
       } else {
-        print("Failed to fetch product. status code: ${responce.statusCode} ");
-        throw Exception("Failed to fetch product");
+        print("Failed to fetch news. Status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        throw Exception("Failed to fetch news");
       }
     } catch (error) {
       print("Error: $error");
-      throw Exception("Faild to fetch products");
+      throw Exception("Failed to fetch news");
     }
   }
 
   //Udpate News
   Future<SingleNewsModel?> updatedNews(
       int newsId, SingleNewsModel singleNewsModel) async {
-    final String url = "http://192.168.0.9/news/$newsId.json";
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    final String url = 'https://achinthamihiran2.planio.com/news/$newsId.json';
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
     try {
       final responce = await http.put(
         Uri.parse(url),
@@ -398,10 +437,19 @@ class ApiService {
 
   //fetch Spent Time id data
   Future<SingleSpenttimeModel> fetchSpentTimeId(int spentTimeId) async {
-    final String url = 'http://192.168.0.9/time_entries/$spentTimeId.json';
+    final String url =
+        'https://achinthamihiran2.planio.com/time_entries/$spentTimeId.json';
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
 
     try {
-      final responce = await http.get(Uri.parse(url));
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
+      final responce = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
       if (responce.statusCode == 200) {
         SingleSpenttimeModel singletimeEntry =
             SingleSpenttimeModel.fromJson(json.decode(responce.body));
@@ -421,11 +469,12 @@ class ApiService {
   //Update spent time
   Future<SingleSpenttimeModel?> updatedSpentTime(
       int spentTimeId, SingleSpenttimeModel singleSpenttimeModel) async {
-    final String url = 'http://192.168.0.9/time_entries/$spentTimeId.json';
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    final String url =
+        'https://achinthamihiran2.planio.com/time_entries/$spentTimeId.json';
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ' + base64Encode(utf8.encode('$username:$apiKey'));
     try {
       final responce = await http.put(
         Uri.parse(url),
@@ -465,8 +514,9 @@ class ApiService {
       return null;
     }
   }
+
   //Update single issues
-    Future<SingleIssuesModel?> updatedSingleIssues(
+  Future<SingleIssuesModel?> updatedSingleIssues(
       int issueId, SingleIssuesModel singleIssues) async {
     final String url = 'http://192.168.0.9/issues/$issueId.json';
     String username = 'user';
