@@ -14,10 +14,18 @@ import 'package:redmine_mobile_app/model/tracker_model.dart';
 class ApiService {
   //Fetch Issues List
   Future<List<IssuesModel>> fetchIssues() async {
-    const String url = "http://192.168.0.9/projects/gsmb-project/issues.json";
+    const String url = "https://achinthamihiran2.planio.com/issues.json";
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
 
     try {
-      final response = await http.get(Uri.parse(url));
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -89,12 +97,13 @@ class ApiService {
 
   //Add Issues
   Future<IssuesModel> addIssues(IssuesModel addissuesModel) async {
-    const String url = "http://192.168.0.9/projects/gsmb-project/issues.json";
+    const String url =
+        "https://achinthamihiran2.planio.com/projects/gsmb-project/issues.json";
 
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
 
     try {
       final response = await http.post(
@@ -153,10 +162,19 @@ class ApiService {
 
   //Fetch Project overview
   Future<List<ProjectOverview>> fetchProjectOverview() async {
-    const String url = "http://192.168.0.9/projects/gsmb-project.json";
+    const String url =
+        "https://achinthamihiran2.planio.com/projects/gsmb-project.json";
+
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
 
     try {
-      final response = await http.get(Uri.parse(url));
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = json.decode(response.body);
@@ -232,12 +250,11 @@ class ApiService {
 
   //Add Spent time
   Future<TimeEntry?> addSpentTime(TimeEntry timeEntry) async {
-    const String url =
-        "http://192.168.0.9/projects/gsmb-project/time_entries.json";
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    const String url = "https://achinthamihiran2.planio.com/time_entries.json";
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ' + base64Encode(utf8.encode('$username:$apiKey'));
 
     try {
       final response = await http.post(
@@ -293,17 +310,18 @@ class ApiService {
 
 //Issues delete
   Future<void> deleteIssue(int issueId) async {
-    final url = Uri.parse('http://192.168.0.9/issues/$issueId.json');
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    final url =
+        Uri.parse('https://achinthamihiran2.planio.com/issues/$issueId.json');
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     final String basicAuth =
-        'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+        'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
 
     try {
       final response = await http.delete(
         url,
         headers: {
-          'Authorization': basicAuth,
+          "Authorization": basicAuth,
         },
       );
 
@@ -311,6 +329,7 @@ class ApiService {
         print("Issue deleted successfully.");
       } else {
         print("Failed to delete issue. Status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
         throw Exception(
             "Failed to delete issue. Status code: ${response.statusCode}");
       }
@@ -322,11 +341,12 @@ class ApiService {
 
   // Spent times delete
   Future<void> deleteSpentTime(int spentTimeId) async {
-    final url = Uri.parse('http://192.168.0.9/time_entries/$spentTimeId.json');
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    final url = Uri.parse(
+        'https://achinthamihiran2.planio.com/time_entries/$spentTimeId.json');
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     final String basicAuth =
-        'Basic ${base64Encode(utf8.encode('$username:$password'))}';
+        'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
 
     try {
       final response = await http.delete(
@@ -492,9 +512,16 @@ class ApiService {
 
   //Fetch single issues
   Future<SingleIssuesModel?> fetchSingleIssuesId(int issueId) async {
-    final url = Uri.parse('http://192.168.0.9/issues/$issueId.json');
+    final url = 'https://achinthamihiran2.planio.com/issues/$issueId.json';
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     try {
-      final response = await http.get(url);
+      String basicAuth =
+          'Basic ${base64Encode(utf8.encode('$username:$apiKey'))}';
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': basicAuth},
+      );
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
         return SingleIssuesModel.fromJson(jsonResponse['issue']);
@@ -518,11 +545,12 @@ class ApiService {
   //Update single issues
   Future<SingleIssuesModel?> updatedSingleIssues(
       int issueId, SingleIssuesModel singleIssues) async {
-    final String url = 'http://192.168.0.9/issues/$issueId.json';
-    String username = 'user';
-    String password = 'mLM:jDE:5h/T';
+    final String url =
+        'https://achinthamihiran2.planio.com/issues/$issueId.json';
+    const String username = "achinthamihiran654";
+    const String apiKey = "Ab2#*De#";
     String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ' + base64Encode(utf8.encode('$username:$apiKey'));
     try {
       final responce = await http.put(
         Uri.parse(url),

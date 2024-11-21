@@ -47,8 +47,8 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
     "Achintha": 1,
   };
   static const Map<String, int> ActivityIds = {
-    "Development": 9,
-    "Design": 8,
+    "Development": 21,
+    "General": 20,
   };
 
   DateTime? selectedDate;
@@ -310,7 +310,7 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
                               borderSide: const BorderSide(
                                   color: Colors.black, width: 2),
                             )),
-                        items: <String>["Design", "Development"]
+                        items: <String>["Development", "General"]
                             .map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -332,24 +332,54 @@ class _AddSpentTimeScreenState extends State<AddSpentTimeScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    final newtimeEntry = TimeEntry(
-                      issue: Issue(id: selectedIssueId ?? 0),
-                      user: User(
+                    try {
+                      final newTimeEntry = TimeEntry(
+                        issue: Issue(id: selectedIssueId ?? 0),
+                        user: User(
                           id: selectedUserId ?? 0,
-                          name: selectedUserType ?? ''),
-                      spentOn: getFormattedDate(),
-                      hours: hours,
-                      comments: comments,
-                      activity: Activity(
+                          name: selectedUserType ?? '',
+                        ),
+                        spentOn: getFormattedDate(),
+                        hours: hours,
+                        comments: comments,
+                        activity: Activity(
                           id: selectedActivityIds ?? 0,
-                          name: selectedActivityType ?? ''),
-                    );
-                    await apiService.addSpentTime(newtimeEntry);
+                          name: selectedActivityType ?? '',
+                        ),
+                      );
 
-                    _formKey.currentState?.reset();
+                      await apiService.addSpentTime(newTimeEntry);
+
+                      // Reset the form
+                      _formKey.currentState?.reset();
+
+                      // Show success message
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Spent time added successfully!',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    } catch (error) {
+                      // Handle error (optional)
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Failed to add spent time. Please try again.',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF94cc80),
+                    backgroundColor: const Color(0xFF94cc80),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(

@@ -124,7 +124,9 @@ class _EditIssuesState extends State<EditIssues> {
                         width: 230,
                         child: DropdownButtonFormField<String>(
                           //   value: selectedActivityType,
-                          value: selectedIssueId != null
+
+                          value: selectedIssueId != null &&
+                                  issueTypeIds.containsValue(selectedIssueId)
                               ? issueTypeIds.entries
                                   .firstWhere(
                                       (entry) => entry.value == selectedIssueId)
@@ -145,10 +147,11 @@ class _EditIssuesState extends State<EditIssues> {
                                     color: Colors.black, width: 2),
                               )),
                           items: <String>[
+                            "Task",
+                            "Support",
                             "Bug",
                             "Feature",
-                            "Support",
-                            "Documentation"
+                            "Documentation",
                           ].map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -263,14 +266,16 @@ class _EditIssuesState extends State<EditIssues> {
                       const SizedBox(width: 70),
                       IssueDropdown(
                         //  selectedValue: selectedStatus,
-                        selectedValue: selectedstatusIds != null
+
+                        selectedValue: selectedstatusIds != null &&
+                                statusIds.containsValue(selectedstatusIds)
                             ? statusIds.entries
                                 .firstWhere(
                                     (entry) => entry.value == selectedstatusIds)
                                 .key
                             : null,
                         hintText: "Select status type",
-                        items: const ["New", "In Progress", "Completed"],
+                        items: const ["New", "ongoing", "Closed"],
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedStatus = newValue;
@@ -295,7 +300,10 @@ class _EditIssuesState extends State<EditIssues> {
                       const SizedBox(width: 60),
                       IssueDropdown(
                         //  selectedValue: selectedPriority,
-                        selectedValue: selectedpriorityTypeIds != null
+
+                        selectedValue: selectedpriorityTypeIds != null &&
+                                priorityTypeIds
+                                    .containsValue(selectedpriorityTypeIds)
                             ? priorityTypeIds.entries
                                 .firstWhere((entry) =>
                                     entry.value == selectedpriorityTypeIds)
@@ -306,8 +314,6 @@ class _EditIssuesState extends State<EditIssues> {
                           "Low",
                           "Normal",
                           "High",
-                          "Urgent",
-                          "Immediate"
                         ],
                         onChanged: (String? newValue) {
                           setState(() {

@@ -246,24 +246,24 @@ class AssignedTo {
 
 // Mapping of issue types to IDs
 const Map<String, int> issueTypeIds = {
-  "Bug": 1,
-  "Feature": 2,
-  "Support": 3,
-  "Documentation": 4,
+  "Task": 3,
+  "Support": 4,
+  "Bug": 5,
+  "Feature": 6,
+  "Documentation": 7,
 };
 
 const Map<String, int> statusIds = {
-  "New": 1,
-  "In Progress": 2,
-  "Completed": 3,
+  "Open": 5,
+  "In Progress": 6,
+  "Feedback": 7,
+  "Closed": 8,
 };
 
 const Map<String, int> priorityTypeIds = {
-  "Low": 1,
-  "Normal": 2,
-  "High": 3,
-  "Urgent": 4,
-  "Immediate": 5,
+  "Low": 11,
+  "Normal": 12,
+  "High": 13,
 };
 
 final doneRationValue = Map.fromIterable(

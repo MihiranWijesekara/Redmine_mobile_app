@@ -199,7 +199,7 @@ class _AddIssuesState extends State<AddIssues> {
                     IssueDropdown(
                       selectedValue: selectedStatus,
                       hintText: "Select status type",
-                      items: const ["New", "In Progress", "Completed"],
+                      items: const ["Open", "In Progress", "Closed"],
                       onChanged: (String? newValue) {
                         setState(() {
                           selectedStatus = newValue;
@@ -229,8 +229,6 @@ class _AddIssuesState extends State<AddIssues> {
                         "Low",
                         "Normal",
                         "High",
-                        "Urgent",
-                        "Immediate"
                       ],
                       onChanged: (String? newValue) {
                         setState(() {

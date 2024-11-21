@@ -42,8 +42,8 @@ class _EditSpenttimeState extends State<EditSpenttime> {
     "Achintha": 1,
   };
   static const Map<String, int> ActivityIds = {
-    "Development": 9,
-    "Design": 8,
+    "Development": 21,
+    "General": 20,
   };
   @override
   void initState() {
@@ -376,7 +376,7 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                               borderSide: const BorderSide(
                                   color: Colors.black, width: 2),
                             )),
-                        items: <String>["Design", "Development"]
+                        items: <String>["Development", "General"]
                             .map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -417,67 +417,26 @@ class _EditSpenttimeState extends State<EditSpenttime> {
                         final result = await apiService.updatedSpentTime(
                             widget.singleSpenttimeModel.id!,
                             singleSpenttimeModel);
-
-                        if (result != null) {
-                          // Show success dialog
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text("Success"),
-                                content: const Text(
-                                    "Spent Time saved successfully!"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context)
-                                          .pop(); // Close both the dialog and the add screen
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text("Information"),
-                                content:
-                                    const Text("Spent Time saved successfully"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("OK"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Spent time Update successfully!',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.green,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
                       } catch (error) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Error"),
-                              content:
-                                  Text("Failed to update Spent Time: $error"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("OK"),
-                                ),
-                              ],
-                            );
-                          },
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Failed to Update spent time. Please try again.',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.red,
+                            duration: Duration(seconds: 3),
+                          ),
                         );
                       }
                     }

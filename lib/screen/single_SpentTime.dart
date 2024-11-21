@@ -222,8 +222,14 @@ class _SingleSpenttimeState extends State<SingleSpenttime> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
-                                            content: Text(
-                                                'Spent Time deleted successfully')),
+                                          content: Text(
+                                            'Spent Time deleted successfully',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                          duration: Duration(seconds: 3),
+                                        ),
                                       );
                                       Navigator.pushReplacement(
                                         context,

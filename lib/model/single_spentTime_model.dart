@@ -1,18 +1,18 @@
 class SingleSpenttimeModel {
   final int? id;
-  final Project? project; 
-  final Issue? issue; 
-  final User? user; 
-  final Activity? activity; 
+  final Project? project;
+  final Issue? issue;
+  final User? user;
+  final Activity? activity;
   final double? hours;
   final String? comments;
   final String? spentOn;
 
   SingleSpenttimeModel({
     this.id,
-    this.project, 
-    this.issue, 
-    this.user, 
+    this.project,
+    this.issue,
+    this.user,
     this.activity,
     this.hours,
     this.comments,
@@ -23,7 +23,8 @@ class SingleSpenttimeModel {
   factory SingleSpenttimeModel.fromJson(Map<String, dynamic> json) {
     final timeEntryData = json['time_entry'];
     if (timeEntryData == null || timeEntryData is! Map<String, dynamic>) {
-      throw Exception("Invalid JSON structure: 'time_entry' key is missing or not a map.");
+      throw Exception(
+          "Invalid JSON structure: 'time_entry' key is missing or not a map.");
     }
 
     return SingleSpenttimeModel(
@@ -105,14 +106,14 @@ class Issue {
 
 class User {
   final int id;
-  final String name;
+  final String? name;
 
-  User({required this.id, required this.name});
+  User({required this.id, this.name});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'] as int,
-      name: json['name'] as String,
+      name: json['name'] as String?,
     );
   }
 

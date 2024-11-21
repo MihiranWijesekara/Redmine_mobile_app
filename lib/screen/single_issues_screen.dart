@@ -276,6 +276,8 @@ class _SingleIssuesScreenState extends State<SingleIssuesScreen> {
                                       const SnackBar(
                                         content:
                                             Text('Issue deleted successfully'),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3),
                                       ),
                                     );
                                     Navigator.pushReplacement(
